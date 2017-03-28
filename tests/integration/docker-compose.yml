@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+
+  identidock_integration_tester:
+    build: ../..
+    image: aroyd/identidock_integration_test:${IDENTIDOCK_INTEGRATION_TEST_IMAGE_TAG:-latest}
+    environment:
+      ENV: INTEGRATION_TEST 
+    depends_on:
+      - dnmonster
+      - redis
+  
+  dnmonster:
+    image: amouat/dnmonster:1.0
+  
+  redis:
+    image: redis:3.0-alpine
