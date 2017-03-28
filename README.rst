@@ -110,6 +110,11 @@ After having installed the above dependencies, just run the following commands t
 Run
 ~~~~
 
+The below commands will start everythin in development environment. To start in a production environment, suffix ``-prod`` to every **make** command.
+
+For example, if the normal command is ``make start``, then for production environment, use ``make start-prod``. Do this modification to each command you want to run in production environment. 
+
+**Exceptions:** You cannot use the above method for test commands, test commands are same for every environment. Also the  ``make system-prune`` command is standalone with no production specific variation (Remains same in all environments).
 
 * **Start Applcation**
   ::
