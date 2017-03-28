@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+
+  identidock_functional_tester:
+    build: ../..
+    image: aroyd/identidock_ui_acceptance_test:${IDENTIDOCK_UI_ACCEPTANCE_TEST_IMAGE_TAG:-latest}
+    environment:
+      ENV: END_TO_END_TEST 
+    depends_on:
+      - dnmonster
+      - redis
+  
+  dnmonster:
+    image: amouat/dnmonster:1.0
+  
+  redis:
+    image: redis:3.0-alpine
