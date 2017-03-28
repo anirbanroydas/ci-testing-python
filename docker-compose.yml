@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+
+  identidock:
+    build: .
+    image: aroyd/identidock:${IDENTIDOCK_IMAGE_TAG:-latest}
+    ports:
+      - "5000:5000"
+    environment:
+      ENV: DEV 
+    volumes:
+      - ./ci_testing_python:/ci_testing_python/ci_testing_python
+    depends_on:
+      - dnmonster
+      - redis
+  
+  dnmonster:
+    image: amouat/dnmonster:1.0
+  
+  redis:
+    image: redis:3.0-alpine
