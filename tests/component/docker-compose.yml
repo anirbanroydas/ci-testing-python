@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  identidock_component_tester:
+    build: .
+    depends_on:
+      - identidock
+  identidock:
+    build: ../..
+    image: aroyd/identidock_component_test:${IDENTIDOCK_COMPONENT_TEST_IMAGE_TAG:-latest}
+    environment:
+      ENV: COMPONENT_TEST 
+    ports:
+      - "9090:9090"
+      - "9091:9091"
+    depends_on:
+      - dnmonster
+      - redis
+  
+  dnmonster:
+    image: amouat/dnmonster:1.0
+  
+  redis:
+    image: redis:3.0-alpine
