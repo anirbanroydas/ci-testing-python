@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+
+  identidock:
+    image: aroyd/identidock:${IDENTIDOCK_IMAGE_TAG:-latest}
+    ports:
+      - "9090:9090"
+      - "9091:9091"
+    environment:
+      ENV: PROD 
+    depends_on:
+      - dnmonster
+      - redis
+  
+  dnmonster:
+    image: amouat/dnmonster:1.0
+  
+  redis:
+    image: redis:3.0-alpine
