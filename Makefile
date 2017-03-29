@@ -93,16 +93,16 @@ test-unit:
 	bash -c "tests/test.sh $(APP_NAME) unit $(UNIT_TESTING_NAME) $(UNIT_TEST_DIR)" 
 
 test-component:
-	bash -c "tests/test.sh $(APP_NAME) unit $(COMPONENT_TESTING_NAME) $(COMPONENT_TEST_DIR)" 
+	bash -c "tests/test.sh $(APP_NAME) component $(COMPONENT_TESTING_NAME) $(COMPONENT_TEST_DIR)" 
 
 test-contract:
-	bash -c "tests/test.sh $(APP_NAME) unit $(CONTRACT_TESTING_NAME) $(CONTRACT_TEST_DIR)" 
+	bash -c "tests/test.sh $(APP_NAME) contract $(CONTRACT_TESTING_NAME) $(CONTRACT_TEST_DIR)" 
 
 test-integration:
-	bash -c "tests/test.sh $(APP_NAME) unit $(INTEGRATION_TESTING_NAME) $(INTEGRATION_TEST_DIR)" 
+	bash -c "tests/test.sh $(APP_NAME) integration $(INTEGRATION_TESTING_NAME) $(INTEGRATION_TEST_DIR)" 
 
 test-e2e:
-	bash -c "tests/test.sh $(APP_NAME) unit $(END_TO_END_TESTING_NAME) $(END_TO_END_TEST_DIR)" 
+	bash -c "tests/test.sh $(APP_NAME) e2e $(END_TO_END_TESTING_NAME) $(END_TO_END_TEST_DIR)" 
 
 test-system: test-e2e
 
