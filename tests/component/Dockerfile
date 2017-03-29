@@ -1,11 +1,11 @@
-FROM python:3.4-alpine
+FROM python:3.6-alpine
 
-WORKDIR /component_testing
+WORKDIR /component_test
 
-COPY ../../requirements/requirements-dev.txt /component_testing/
+COPY requirements/requirements-dev.txt /component_test/
 RUN pip install -r requirements-dev.txt
+RUN pip install requests==2.13.0
 
-COPY test_component_identidock.py /component_testing/
-COPY component_test.sh /component_testing/
+COPY tests/component/test_component_identidock.py /component_test/
 
-CMD ["pytest", "test_component_identidock.py"]
+CMD ["pytest", "-v", "-s", "test_component_identidock.py"]
