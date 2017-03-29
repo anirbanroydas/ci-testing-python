@@ -39,12 +39,14 @@ def get_identicon(name):
     name = html.escape(name, quote=True)
     image = cache.get(name)
     if image is None:
-        print ("Cache miss", flush=True)
+        print("Cache miss")
         r = requests.get('http://dnmonster:8080/monster/' + name + '?size=80')
         image = r.content
         cache.set(name, image)
 
     return Response(image, mimetype='image/png')
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
