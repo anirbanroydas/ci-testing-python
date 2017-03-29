@@ -1,0 +1,40 @@
+sudo: required
+
+language: python
+python:
+  - "3.6"
+
+services:
+  - docker
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.11.2
+  DOCKER_VERSION: 17.03.0-ce
+
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine=${DOCKER_VERSION}
+  - sudo docker --version
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+script:
+  - make test-unit
+  - make test-component
+
+# after_success:
+#   - set -e;
+#   - ./test/test.sh coveralls.py
+#   - if [ -z "$DOCKER_PASS" ] ; then
+#       echo "This is a build triggered by an external PR. Skipping docker push.";
+#       exit 0;
+#     fi;
+#   - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS;
+#   - ./scripts/push.sh
+
+#   - set -e
+#   - if [ -z "$DOCKER_PASS" ]; then echo "Build triggered by external PR. Skipping docker push" && exit 0; fi
+#   - docker login -u $DOCKER_USER -p $DOCKER_PASS;
+#   - ./scripts/build-tag-push.sh
