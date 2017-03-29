@@ -1,6 +1,9 @@
 ci-testing-python
 ==================
 
+.. image:: https://travis-ci.org/anirbanroydas/ci-testing-python.svg?branch=master
+     :target: https://travis-ci.org/anirbanroydas/ci-testing-python
+
 Sample Microservice App in Python for CI-CD and Testing Purpose using flask, pytest, pytest-flask, uber\'s test doubles package, tox with Dockerized environment on CI servers like Jenkins and Travis CI both application in docker and jenkins in docker.
 
 
