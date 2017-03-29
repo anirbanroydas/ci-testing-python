@@ -1,0 +1,50 @@
+{
+	"responses": [
+		{
+          	"inject": "<%- stringify(filename, 'mountebank_dnmonster_monster_response.ejs') %>"
+		}
+	],
+	"predicates": [
+		{
+			"or": [
+				{
+					"equals": {
+		            	"method": "GET",
+		            	"path": "/monster/ABCDEF123456789",
+		            	"query": {
+		              		"size": "80"
+		            	},
+		            	"headers": {
+		              		"Accept": "text/plain"
+		            	},
+		            	"caseSensitive": true
+		          	}
+		        },
+		        
+
+	        ]
+		}
+	]
+},
+{
+	"responses": [
+		{
+			"inject": "<%- stringify(filename, 'mountebank_dnmonster_monster_response.ejs') %>"
+		}
+	],
+	"predicates": [
+		{
+			"matches": {
+            	"method": "GET",
+            	"path": "/monster/",
+            	"query": {
+              		"size": "80"
+            	},
+            	"headers": {
+              		"Accept": "text/plain"
+            	},
+            	"caseSensitive": true
+		    }
+		}
+	]
+}

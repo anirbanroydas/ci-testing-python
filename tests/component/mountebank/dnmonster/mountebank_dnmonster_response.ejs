@@ -1,0 +1,10 @@
+function (request, state) {
+    mocked_png_img = Buffer.from('I am a mocked image', 'binary')
+    
+    return {
+    	headers: {
+        	'Content-Type': 'text/plain'
+      	},
+      	body: mocked_png_img
+    };
+}
