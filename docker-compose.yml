@@ -10,7 +10,7 @@ services:
     environment:
       ENV: DEV 
     volumes:
-      - ./ci_testing_python:/ci_testing_python/ci_testing_python
+      - ./ci_testing_python:/project/ci_testing_python
     depends_on:
       - dnmonster
       - redis
