@@ -13,6 +13,9 @@ cleanup () {
 
 	# remove test containers
 	docker-compose -p ${ARGS[2]} -f ${ARGS[3]}/docker-compose.yml rm --force -v
+
+	# clean system with dangling images, containers, volumes
+	echo "y" | docker system prune
 }
 
 
