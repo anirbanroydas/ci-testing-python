@@ -20,11 +20,16 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
 
+install:
+  - pip install coveralls
+
 script:
+  # - make test
   - make test-unit
   - make test-component
 
-# after_success:
+after_success:
+  - coveralls
 #   - set -e;
 #   - ./test/test.sh coveralls.py
 #   - if [ -z "$DOCKER_PASS" ] ; then
@@ -38,3 +43,10 @@ script:
 #   - if [ -z "$DOCKER_PASS" ]; then echo "Build triggered by external PR. Skipping docker push" && exit 0; fi
 #   - docker login -u $DOCKER_USER -p $DOCKER_PASS;
 #   - ./scripts/build-tag-push.sh
+
+notifications:
+  email:
+    recipients:
+      - anirban.nick@gmail.com
+    on_success: always
+    on_failure: always
