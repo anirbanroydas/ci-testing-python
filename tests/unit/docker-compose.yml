@@ -7,5 +7,7 @@ services:
     image: aroyd/identidock_unit_test:${IDENTIDOCK_UNIT_TEST_IMAGE_TAG:-latest}
     environment:
       ENV: UNIT_TEST 
+    # volumes:
+    #   - .:/project
 
 
