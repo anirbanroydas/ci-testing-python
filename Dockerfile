@@ -24,6 +24,9 @@ RUN set -e && \
 
 COPY setup.py /project/
 COPY setup.cfg /project/
+COPY .coveragerc /project/
+COPY tox.ini /project/
+COPY pytest.ini /project/
 COPY README.rst /project/
 COPY docker-entrypoint.sh /usr/local/bin/
 
