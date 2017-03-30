@@ -36,8 +36,11 @@ TEST_EXIT_CODE=$(docker wait "$DOCKER_TEST_CONTAINER")
 
 echo "ls -a before docker cp command"
 ls -a
-echo "Copyting coverage report data file to project root directory"
-docker cp "$DOCKER_TEST_CONTAINER":/project/.coverage "$5"
+echo "Current dir : $5"
+echo "Copyting coverage report data file to project root directory only if Unit Test"
+if [ "$2" = "unit" ]; then
+	docker cp "$DOCKER_TEST_CONTAINER":/project/.coverage "$5"/.coverage.unit_docker
+fi
 echo "ls -a after docker cp command"
 ls -a
 
