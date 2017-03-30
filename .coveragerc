@@ -1,7 +1,12 @@
 [run]
 branch = true
-source = ci_testing_python
 data_file = .coverage
+source = ./ci_testing_python
+
+[paths]
+source =
+	./ci_testing_python
+	/project/ci_testing_python
 
 [report]
 show_missing = true
