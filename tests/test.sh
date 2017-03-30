@@ -34,6 +34,13 @@ fi
 DOCKER_TEST_CONTAINER="$3_$1_$2_tester_1"
 TEST_EXIT_CODE=$(docker wait "$DOCKER_TEST_CONTAINER")
 
+echo "ls -a before docker cp command"
+ls -a
+echo "Copyting coverage report data file to project root directory"
+docker cp "$DOCKER_TEST_CONTAINER":/project/.coverage "$5"
+echo "ls -a after docker cp command"
+ls -a
+
 echo "Test Containers Logs"
 docker logs "$DOCKER_TEST_CONTAINER"
 
