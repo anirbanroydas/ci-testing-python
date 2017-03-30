@@ -10,6 +10,8 @@ services:
     depends_on:
       - dnmonster
       - redis
+    volumes:
+      - ../../:/project
   
   dnmonster:
     image: amouat/dnmonster:1.0
