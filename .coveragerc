@@ -1,0 +1,13 @@
+[run]
+branch = true
+source = ci_testing_python
+data_file = .coverage
+
+[report]
+show_missing = true
+skip_covered = false
+precision = 2
+
+[html]
+title = Coverage HTML Report
+directory = htmlcov
