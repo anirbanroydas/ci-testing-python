@@ -8,18 +8,22 @@ if [ "$ENV" = "DEV" ]; then
 
 elif [ "$ENV" = "UNIT_TEST" ]; then
 	echo "Running Unit Tests"
-	pip install --no-deps .
-	exec pytest -v -s tests/unit 
+	pip install --no-deps -e .
+	pytest -v -s --cov=ci_testing_python tests/unit 
+	ls -a
+	# exec tox -e unit
 
 elif [ "$ENV" = "CONTRACT_TEST" ]; then
 	echo "Running Contract Tests"
-	pip install --no-deps .
-	exec pytest -v -s tests/contract
+	pip install --no-deps -e .
+	exec pytest -v -s --cov=ci_testing_python tests/contract
+	# exec tox -e contract
 
 elif [ "$ENV" = "INTEGRATION_TEST" ]; then
 	echo "Running Integration Tests"
-	pip install --no-deps .
-	exec pytest -v -s tests/integration
+	pip install --no-deps -e .
+	exec pytest -v -s --cov=ci_testing_python tests/integration
+	# exec tox -e integration
 
 elif [ "$ENV" = "COMPONENT_TEST" ]; then
 	echo "Running Component Tests"
