@@ -18,9 +18,9 @@ services:
       - redis
   
   dnmonster:
-    #build: mountebank/dnmonster
-    #image: aroyd/dnmoster_stub:${DNMONSTER_STUB_IMAGE_TAG:-latest}
-    image: amouat/dnmonster:1.0
+    build: mountebank/dnmonster
+    image: aroyd/dnmoster_stub:${DNMONSTER_STUB_IMAGE_TAG:-latest}
+    # image: amouat/dnmonster:1.0
   
   redis:
     image: redis:3.0-alpine
