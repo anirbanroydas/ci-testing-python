@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -7,15 +7,27 @@ NC='\033[0m'
 ARGS=("$@")
 
 
+DOCKER="docker"
+DOCKER_COMPOSE="docker-compose"
+
+if [[ "$6" -eq "jenkins" ]]; then
+	DOCKER="sudo docker"
+	DOCKER_COMPOSE="sudo docker-compose"
+elif [[ "$6" -eq "travis" ]]; then
+	DOCKER="docker"
+	DOCKER_COMPOSE="docker-compose"
+fi
+
+
 cleanup () {
 	# stop test containers
-	docker-compose -p ${ARGS[2]} -f ${ARGS[3]}/docker-compose.yml stop
+	"$DOCKER_COMPOSE" -p ${ARGS[2]} -f ${ARGS[3]}/docker-compose.yml stop
 
 	# remove test containers
-	docker-compose -p ${ARGS[2]} -f ${ARGS[3]}/docker-compose.yml rm --force -v
+	"$DOCKER_COMPOSE" -p ${ARGS[2]} -f ${ARGS[3]}/docker-compose.yml rm --force -v
 
 	# clean system with dangling images, containers, volumes
-	echo "y" | docker system prune
+	echo "y" | "$DOCKER" system prune
 }
 
 
@@ -23,8 +35,8 @@ trap 'cleanup ; printf "${RED}Tests Failed For Unexpected Reasons${NC}\n"' HUP I
 
 # build and run
 echo "Building and then Running Test Containers"
-docker-compose -p "$3" -f "$4"/docker-compose.yml build && \
-docker-compose -p "$3" -f "$4"/docker-compose.yml up -d
+"$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml build && \
+"$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml up -d
 
 if [ $? -ne 0 ] ; then
   printf "${RED}Docker Compose Failed${NC}\n"
@@ -32,17 +44,17 @@ if [ $? -ne 0 ] ; then
 fi
 
 DOCKER_TEST_CONTAINER="$3_$1_$2_tester_1"
-TEST_EXIT_CODE=$(docker wait "$DOCKER_TEST_CONTAINER")
+TEST_EXIT_CODE=$("$DOCKER" wait "$DOCKER_TEST_CONTAINER")
 
 
 echo "Current dir : $5"
 echo "Copyting coverage report data file to project root directory only if Unit Test"
 if [ "$2" = "unit" ]; then
-	docker cp "$DOCKER_TEST_CONTAINER":/project/.coverage "$5"/.coverage.unit_docker
+	"$DOCKER" cp "$DOCKER_TEST_CONTAINER":/project/.coverage "$5"/.coverage.unit_docker
 fi
 
 echo "Test Containers Logs"
-docker logs "$DOCKER_TEST_CONTAINER"
+"$DOCKER" logs "$DOCKER_TEST_CONTAINER"
 
 if [ -z ${TEST_EXIT_CODE+x} ] || [ "$TEST_EXIT_CODE" -ne 0 ] ; then
   printf "${RED}Tests Failed${NC} - Exit Code: $TEST_EXIT_CODE\n"
