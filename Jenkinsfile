@@ -50,18 +50,22 @@ node {
 		sh "sudo docker images"
 		echo "docker ps -a"
 		sh "sudo docker ps -a"
+		echo "sudo docker-compose --version"
+		sh "sudo docker-compose --version"
+		echo "docker-compose --version"
+		sh "docker-compose --version"
 
 	}
 
 	stage('Unit-Test') {
 		echo "Unit Tests Starting"
-		sh "make test-unit"
+		sh "make test-unit CI_SERVER=jenkins"
 		echo "Unit Tests Finished"
 	}
 
 	stage('Component-Test') {
 		echo "Component Tests Starting"
-		sh "make test-component"
+		sh "make test-component CI_SERVER=jenkins"
 		echo "Component Tests Finished"
 	}
 	
