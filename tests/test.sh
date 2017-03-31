@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -10,7 +10,7 @@ ARGS=("$@")
 DOCKER="docker"
 DOCKER_COMPOSE="docker-compose"
 
-if [[ "$6" -eq "jenkins" ]]; then
+if [ "$6" = "jenkins" ]; then
 	DOCKER="sudo docker"
 	DOCKER_COMPOSE="sudo docker-compose"
 elif [[ "$6" -eq "travis" ]]; then
