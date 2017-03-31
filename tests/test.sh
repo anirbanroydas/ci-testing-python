@@ -12,8 +12,10 @@ DOCKER_COMPOSE="docker-compose"
 
 if [ "$6" = "jenkins" ]; then
 	DOCKER="sudo docker"
+	DOCKER_COMPOSE="sudo docker-compose"
 elif [[ "$6" -eq "travis" ]]; then
 	DOCKER="docker"
+	DOCKER_COMPOSE="docker-compose"
 fi
 
 
@@ -33,7 +35,7 @@ trap 'cleanup ; printf "${RED}Tests Failed For Unexpected Reasons${NC}\n"' HUP I
 
 # build and run
 echo "Building and then Running Test Containers"
-"$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml build && \
+"$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml build
 "$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml up -d
 
 if [ $? -ne 0 ] ; then
