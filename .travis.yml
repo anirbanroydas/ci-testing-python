@@ -1,48 +1,39 @@
 sudo: required
-
 language: python
-
 python:
-  - '3.6'
-
+- '3.6'
 services:
-  - docker
-
+- docker
 env:
   DOCKER_COMPOSE_VERSION: 1.11.2
   DOCKER_VERSION: 17.03.0-ce
-
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
-  - sudo docker --version
-  - sudo rm /usr/local/bin/docker-compose
-  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-  - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - which docker-compose
-  - sudo docker-compose --version
-
+- sudo apt-get -qq update
+- sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-engine
+- sudo docker --version
+- sudo rm /usr/local/bin/docker-compose
+- curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname
+  -s`-`uname -m` > docker-compose
+- chmod +x docker-compose
+- sudo mv docker-compose /usr/local/bin
+- which docker-compose
+- sudo docker-compose --version
 install:
-  - pip install coveralls
-
+- pip install coveralls
 script:
-  - make test-unit
-  - make test-component
-
+- make test-unit
+- make test-component
 after_success:
-  - coveralls
-
+- coveralls
 notifications:
   email:
     recipients:
-      - anirban.nick@gmail.com
+    - anirban.nick@gmail.com
     on_success: never
     on_failure: always
-  
   slack:
+    secure: ElBCmf555oP8e9pghlxWGkC8qIWr7ieYv7K8vnLlAbQ1PLKqISM8ENmgMYG/qr0pxCS7m/GWzKsWk72swOtYjFY0ddrZJS905FjrmFKllonnDP2Rh7f+SoRathta6pHEILE7bMMNJ8lyr48Ww2JohyZ+S8qm5bzMWxxdCIeP76anrMDWiQFa++a06I456lZhNSS/DMUJEf/18WyPL+wuPhamgbLdrlrY961IgotPI7e+3nvj8IXEyHy/MJME2E7F7vnOW+lpsgs0sDqSzWnHD+cyOD/Wng+Zpwpu80SIHE4rC0rq+5jtt+lgfmiyRGtUrHuqErcqyjNjed73QMftdq/46qaHKwoWUrmX0s2aSF/9bfACZyEeZsFgBzJ8r6/GRJqMLI/1UI2mhUXYkkTyq9fDEZMOHlAc9ZlDCxZxchpc5rHlg7yKRzGS3XIYkpjVw0XRui3axCHt1Q5mYQaK417OYW4U6Sy8iKe5R6ao3YNuwMl24A7mkr8rFR2H42zPfYLcwaPRWxdUcQ2tZjQv59+dQ2IKYakG6xPipBFz5dnQWmBQKr3J7fidLsfMe7iyEbhfDS9CNJh4uzbMU8G2xiWnfirzpAPN7jQoSW5c+mYAIEuPh7bVYrCM6rjkFO/SsAqMpKKskMyoZNkitFK1D7lDrspR2CKtE0nbUTDJTbA=
     rooms:
-      secure: eAyd3jGCbkqs+BgAKnzlYS5c2/jBtmRnnO25y8GQlze7Bbrhwyl4sq+vZNCIQ+D8QN1/yyH28AoYbP0gg2muk3d5b7POGUe7W5AQITLOI5nyDytPH3OKjfzcOH9cEoYczL2vjzVpoznU5H1s5ooS7c1cN8mQfm5jRYFwBPQDpAGAcDgOEVXZOck58gN+y94I3kOCL238fObv2erYw6kndRnlkSw76gHkFO2px7Ti4dKS/zqzgKzJPK7weZiz1G9qkpeH5TRIOeWDgHcuNQSgMZaLS4CHdtg5iQvbVSn2c/JYS1qGQEoRlcDYfddGaNDljQCq0EiPDgKkAZbx1SDC5UGJCrD+0BOHuwZRtXFzGL0XsZ1fq8N0Jjq3P8NaOezAPRiIdOqxRaI2HyI7Mw5Vcko0GfOxOjfb0dzA1PUTMdSOWfcHj9a8muz1SQVF+lQz/ANnnzTNQM04VtOAP4FeXeUJixiKkQNN3a/GYCU9PJ3gQpgAR7irIW00e/LU1VN3J5rv7TVbhjeFDVxVHDzXx29KomvF+KNER/KcwOaxC5Ect6gM6SHkIlSAFSj7zB9SHfx65iJpbiTV2LqlrpWsJtLw1xcwnVaSgI6t3aFTxD4p+t8OvRcPWjmZDWLwz6Mns3FY7U9AIuqMBeag+3Q78JlfsomZia40AeLHX3+uQ+4=
       secure: qMolsG+ZCXo3yxOs51Xlu4ryCBZiWMRT/op5Ygb84wjRUa4gv0haljjv2gxKd3w0lhc5ezAcLPBYdYXDHlBn69L3ENlqN4+MFYaLHrV7DP3wmuXj248+FzvAkTN0rYm+8clDOH2F0nwcNhGrcI7XqADYdHj9G7uBX38g1W8aq2rQRLqG6MhPAk5MSOsyqqr+Ixoa1O6gyTDcEPLJgDTqgUINE7FrurZwnmRtbj6Q12LBAIwAclwBY9mSZbU5Hs1Kwg7jmuPfgZ7WC4dVnO6N+tywKUB9QMTR0D8VudE8AXIeZ8q09kJfYyMc0/KyJD3q9soc4+QGEZXu5xwjP9PWtQjzgEcFDvpMUtQlJNtHw5siVYKueHv9U8FOdR/HccExFDyIwEDTQt/jXzqMLB+tFxlDUpG85AWJwuyPqSW7lTr0lmBrGedeq4v+GYwUmU/KqxUSpL+kxV3BYgb4BrOfeb0e25oVZafzlmWzJuEB9ZSGK7FxiMhv0JcbBCDM/yWx1pI9kdZgehUYZkwCc8dB52Nde1/dsHUahKL2ixFFOGySnBgT/RbG1drtfUW9qhD+CLQe5qyafpDVQjeGIwswlmJLQnYhGStxnT+JYt5oTNz69Bdyhp/kKLBJnmx2qUdeHAt0zH0GtRnPfCKuHqbtkoPPUGXMqIJ2H4MyKLg1I8k=
     on_success: always
-    on_failure: always  
+    on_failure: always 
