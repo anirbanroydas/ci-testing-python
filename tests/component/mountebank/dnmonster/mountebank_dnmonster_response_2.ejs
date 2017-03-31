@@ -1,0 +1,65 @@
+// Sample Imosters, Refer : http://www.mbtest.org/docs/api/injection
+
+
+function (request, state, logger) {
+    logger.info('origin called');
+    state.requests = state.requests || 0;
+    state.requests += 1;
+    return {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ count: state.requests })
+    };
+}
+
+
+function (request, state) {
+    var count = state.requests ? Object.keys(state.requests).length : 0,
+        util = require('util');
+
+    return {
+        body: util.format('There have been %s proxied calls', count)
+    };
+}
+
+
+function (request, state, logger, callback) {
+    var cacheKey = request.method + ' ' + request.path;
+
+    if (typeof state.requests === 'undefined') {
+        state.requests = {};
+    }
+
+    if (state.requests[cacheKey]) {
+        logger.info('Using previous response');
+        callback(state.requests[cacheKey]);
+    }
+
+    var http = require('http'),
+        options = {
+            method: request.method,
+            hostname: 'localhost',
+            port: 5555,
+            path: request.path,
+            headers: request.headers
+        },
+        httpRequest = http.request(options, function (response) {
+            var body = '';
+            response.setEncoding('utf8');
+            response.on('data', function (chunk) {
+                body += chunk;
+            });
+            response.on('end', function () {
+                var stubResponse = {
+                        statusCode: response.statusCode,
+                        headers: response.headers,
+                        body: body
+                    };
+                logger.info('Successfully proxied: ' + JSON.stringify(stubResponse));
+                state.requests[cacheKey] = stubResponse;
+                callback(stubResponse);
+            });
+        });
+    httpRequest.end();
+}
