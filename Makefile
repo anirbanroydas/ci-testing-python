@@ -133,19 +133,19 @@ clean-all: clean-dev clean-prod
 # 	./tests/test.sh $(APP_NAME) unit $(UNIT_TESTING_NAME) $(UNIT_TEST_DIR) 
 
 test-unit:
-	bash -c "tests/test.sh $(APP_NAME) unit $(UNIT_TESTING_NAME) $(UNIT_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
+	bash -c "tests/test.sh $(APP_NAME) unit $(UNIT_TESTING_NAME) $(UNIT_TEST_DIR) $(PROJECT_ROOT_DIR) $(DOCKER) $(DOCKER_COMPOSE)" 
 
 test-component:
-	bash -c "tests/test.sh $(APP_NAME) component $(COMPONENT_TESTING_NAME) $(COMPONENT_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
+	bash -c "tests/test.sh $(APP_NAME) component $(COMPONENT_TESTING_NAME) $(COMPONENT_TEST_DIR) $(PROJECT_ROOT_DIR) $(DOCKER) $(DOCKER_COMPOSE)" 
 
 test-contract:
-	bash -c "tests/test.sh $(APP_NAME) contract $(CONTRACT_TESTING_NAME) $(CONTRACT_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
+	bash -c "tests/test.sh $(APP_NAME) contract $(CONTRACT_TESTING_NAME) $(CONTRACT_TEST_DIR) $(PROJECT_ROOT_DIR) $(DOCKER) $(DOCKER_COMPOSE)" 
 
 test-integration:
-	bash -c "tests/test.sh $(APP_NAME) integration $(INTEGRATION_TESTING_NAME) $(INTEGRATION_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
+	bash -c "tests/test.sh $(APP_NAME) integration $(INTEGRATION_TESTING_NAME) $(INTEGRATION_TEST_DIR) $(PROJECT_ROOT_DIR) $(DOCKER) $(DOCKER_COMPOSE)" 
 
 test-e2e:
-	bash -c "tests/test.sh $(APP_NAME) e2e $(END_TO_END_TESTING_NAME) $(END_TO_END_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
+	bash -c "tests/test.sh $(APP_NAME) e2e $(END_TO_END_TESTING_NAME) $(END_TO_END_TEST_DIR) $(PROJECT_ROOT_DIR) $(DOCKER) $(DOCKER_COMPOSE)" 
 
 test-system: test-e2e
 
