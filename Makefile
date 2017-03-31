@@ -21,7 +21,6 @@ DOCKER_COMPOSE = docker-compose
 
 ifeq ($(CI_SERVER), jenkins)
 	DOCKER = sudo docker
-	DOCKER_COMPOSE = sudo docker-compose
 endif
 
 
