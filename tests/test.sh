@@ -26,13 +26,13 @@ echo "docker compose : $DOCKER_COMPOSE"
 
 cleanup () {
 	# stop test containers
-	"$DOCKER_COMPOSE" -p ${ARGS[2]} -f ${ARGS[3]}/docker-compose.yml stop
+	$DOCKER_COMPOSE -p ${ARGS[2]} -f ${ARGS[3]}/docker-compose.yml stop
 
 	# remove test containers
-	"$DOCKER_COMPOSE" -p ${ARGS[2]} -f ${ARGS[3]}/docker-compose.yml rm --force -v
+	$DOCKER_COMPOSE -p ${ARGS[2]} -f ${ARGS[3]}/docker-compose.yml rm --force -v
 
 	# clean system with dangling images, containers, volumes
-	echo "y" | "$DOCKER" system prune
+	echo "y" | $DOCKER system prune
 }
 
 
@@ -57,17 +57,17 @@ if [ $? -ne 0 ] ; then
 fi
 
 DOCKER_TEST_CONTAINER="$3_$1_$2_tester_1"
-TEST_EXIT_CODE=$("$DOCKER" wait "$DOCKER_TEST_CONTAINER")
+TEST_EXIT_CODE=$($DOCKER wait "$DOCKER_TEST_CONTAINER")
 
 
 echo "Current dir : $5"
 echo "Copyting coverage report data file to project root directory only if Unit Test"
 if [ "$2" = "unit" ]; then
-	"$DOCKER" cp "$DOCKER_TEST_CONTAINER":/project/.coverage "$5"/.coverage.unit_docker
+	$DOCKER cp "$DOCKER_TEST_CONTAINER":/project/.coverage "$5"/.coverage.unit_docker
 fi
 
 echo "Test Containers Logs"
-"$DOCKER" logs "$DOCKER_TEST_CONTAINER"
+$DOCKER logs "$DOCKER_TEST_CONTAINER"
 
 if [ -z ${TEST_EXIT_CODE+x} ] || [ "$TEST_EXIT_CODE" -ne 0 ] ; then
   printf "${RED}Tests Failed${NC} - Exit Code: $TEST_EXIT_CODE\n"
