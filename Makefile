@@ -1,17 +1,28 @@
 APP_NAME = identidock
 PROJECT_NAME = cipython
+
 UNIT_TESTING_NAME = cipythonunit
 CONTRACT_TESTING_NAME = cipythoncontract
 INTEGRATION_TESTING_NAME = cipythonintegration
 COMPONENT_TESTING_NAME = cipythoncomponent
 END_TO_END_TESTING_NAME = cipythone2e
+
 UNIT_TEST_DIR = $(PWD)/tests/unit
 CONTRACT_TEST_DIR = $(PWD)/tests/contract
 INTEGRATION_TEST_DIR = $(PWD)/tests/integration
 COMPONENT_TEST_DIR = $(PWD)/tests/component
 END_TO_END_TEST_DIR = $(PWD)/tests/e2e
+
 PROJECT_ROOT_DIR = $(PWD)
 
+CI_SERVER = travis
+DOCKER = docker 
+DOCKER_COMPOSE = docker-compose
+
+ifeq ($(CI_SERVER), jenkins)
+	DOCKER = sudo docker
+	DOCKER_COMPOSE = sudo docker-compose
+endif
 
 
 
@@ -34,10 +45,10 @@ clean-build:
 build: build-dev
 
 build-dev: 
-	docker-compose -p $(PROJECT_NAME) build
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) build
 
 build-prod:
-	docker-compose -p $(PROJECT_NAME) -f docker-compose.prod.yml build
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml build
 
 
 
@@ -46,10 +57,10 @@ build-prod:
 start: start-dev
 
 start-dev: build-dev
-	docker-compose -p $(PROJECT_NAME) up -d
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) up -d
 
 start-prod: build-prod
-	docker-compose -p $(PROJECT_NAME) -f docker-compose.prod.yml up -d
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml up -d
 
 
 
@@ -58,10 +69,10 @@ start-prod: build-prod
 stop: stop-dev
 
 stop-dev:
-	docker-compose -p $(PROJECT_NAME) stop
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) stop
 
 stop-prod:
-	docker-compose -p $(PROJECT_NAME) -f docker-compose.prod.yml stop
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml stop
 
 stop-all: stop-dev stop-prod
 
@@ -72,10 +83,10 @@ stop-all: stop-dev stop-prod
 remove: remove-dev
 
 remove-dev: stop-dev
-	docker-compose -p $(PROJECT_NAME) rm --force -v
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) rm --force -v
 
 remove-prod: stop-prod
-	docker-compose -p $(PROJECT_NAME) -f docker-compose.prod.yml rm --force -v
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml rm --force -v
 
 remove-all: remove-dev remove-prod
 
@@ -88,23 +99,23 @@ check-logs: check-logs-dev
 check-logs-app: check-logs-dev-app
 
 check-logs-dev:
-	docker-compose -p $(PROJECT_NAME) logs --follow --tail=10 $(APP_NAME)
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) logs --follow --tail=10 $(APP_NAME)
 
 check-logs-dev-app:
-	docker-compose -p $(PROJECT_NAME) logs --follow --tail=10
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) logs --follow --tail=10
 
 check-logs-prod:
-	docker-compose -p $(PROJECT_NAME) -f docker-compose.prod.yml logs --follow --tail=10 $(APP_NAME)
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml logs --follow --tail=10 $(APP_NAME)
 
 check-logs-prod-app:
-	docker-compose -p $(PROJECT_NAME) -f docker-compose.prod.yml logs --follow --tail=10
+	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml logs --follow --tail=10
 
 
 
 .PHONY: system-prune clean clean-dev clean-prod clean-all
 
 system-prune:
-	echo "y" | docker system prune
+	echo "y" | $(DOCKER) system prune
 
 clean: clean-dev
 
@@ -122,19 +133,19 @@ clean-all: clean-dev clean-prod
 # 	./tests/test.sh $(APP_NAME) unit $(UNIT_TESTING_NAME) $(UNIT_TEST_DIR) 
 
 test-unit:
-	bash -c "tests/test.sh $(APP_NAME) unit $(UNIT_TESTING_NAME) $(UNIT_TEST_DIR) $(PROJECT_ROOT_DIR)" 
+	sh -c "tests/test.sh $(APP_NAME) unit $(UNIT_TESTING_NAME) $(UNIT_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
 
 test-component:
-	bash -c "tests/test.sh $(APP_NAME) component $(COMPONENT_TESTING_NAME) $(COMPONENT_TEST_DIR) $(PROJECT_ROOT_DIR)" 
+	sh -c "tests/test.sh $(APP_NAME) component $(COMPONENT_TESTING_NAME) $(COMPONENT_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
 
 test-contract:
-	bash -c "tests/test.sh $(APP_NAME) contract $(CONTRACT_TESTING_NAME) $(CONTRACT_TEST_DIR) $(PROJECT_ROOT_DIR)" 
+	sh -c "tests/test.sh $(APP_NAME) contract $(CONTRACT_TESTING_NAME) $(CONTRACT_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
 
 test-integration:
-	bash -c "tests/test.sh $(APP_NAME) integration $(INTEGRATION_TESTING_NAME) $(INTEGRATION_TEST_DIR) $(PROJECT_ROOT_DIR)" 
+	sh -c "tests/test.sh $(APP_NAME) integration $(INTEGRATION_TESTING_NAME) $(INTEGRATION_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
 
 test-e2e:
-	bash -c "tests/test.sh $(APP_NAME) e2e $(END_TO_END_TESTING_NAME) $(END_TO_END_TEST_DIR) $(PROJECT_ROOT_DIR)" 
+	sh -c "tests/test.sh $(APP_NAME) e2e $(END_TO_END_TESTING_NAME) $(END_TO_END_TEST_DIR) $(PROJECT_ROOT_DIR) $(CI_SERVER)" 
 
 test-system: test-e2e
 
