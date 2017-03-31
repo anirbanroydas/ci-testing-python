@@ -9,11 +9,7 @@ if [ "$ENV" = "DEV" ]; then
 elif [ "$ENV" = "UNIT_TEST" ]; then
 	echo "Running Unit Tests"
 	pip install --no-deps -e .
-	pytest -v -s --cov=./ci_testing_python tests/unit 
-	echo "File list inside Docker container [ls -a]"
-	ls -a
-	echo "File content of .coverage"
-	cat .coverage
+	exec pytest -v -s --cov=./ci_testing_python tests/unit 
 	# exec tox -e unit
 
 elif [ "$ENV" = "CONTRACT_TEST" ]; then
