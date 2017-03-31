@@ -8,7 +8,6 @@ COMPONENT_MONSTER_BASE_URL = COMPONENT_INDEX_URL + '/monster'
 
 
 
-
 def test_get_mainpage():
 	# print('component tester sleeping for 1 sec to let the identidock app to be ready adn also start its server')
 	# sleep(1)
@@ -45,7 +44,7 @@ def test_get_identicon_with_valid_name_and_invalid_post_method_should_return_405
 
 
 def test_get_identicon_with_valid_name_and_cache_miss():	
-	name_hash = 'ABCDEF123456789'
+	name_hash = 'ABCDEF123456789AGAIN'
 	page = requests.get('{0}/{1}'.format(COMPONENT_MONSTER_BASE_URL, name_hash))
 	
 	# print('page.content : {0}'.format(page.content))
@@ -55,7 +54,7 @@ def test_get_identicon_with_valid_name_and_cache_miss():
 
 
 def test_get_identicon_with_valid_name_and_cache_hit():	
-	name_hash = 'ABCDEF123456789'
+	name_hash = 'ABCDEF123456789AGAIN'
 	page = requests.get('{0}/{1}'.format(COMPONENT_MONSTER_BASE_URL, name_hash))
 	
 	# print('page.content : {0}'.format(page.content))
