@@ -20,6 +20,9 @@ elif [[ "$6" -eq "travis" ]]; then
 	DOCKER_COMPOSE="docker-compose"
 fi
 
+echo "docker : $DOCKER"
+echo "docker compose : $DOCKER_COMPOSE"
+
 
 cleanup () {
 	# stop test containers
