@@ -11,11 +11,11 @@ DOCKER="docker"
 DOCKER_COMPOSE="docker-compose"
 
 if [ "$6" = "jenkins" ]; then
-	DOCKER="sudo docker"
-	DOCKER_COMPOSE="sudo docker-compose"
+	DOCKER=sudo docker
+	DOCKER_COMPOSE=sudo docker-compose
 elif [[ "$6" -eq "travis" ]]; then
-	DOCKER="docker"
-	DOCKER_COMPOSE="docker-compose"
+	DOCKER=docker
+	DOCKER_COMPOSE=docker-compose
 fi
 
 
