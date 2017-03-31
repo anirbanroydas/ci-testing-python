@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/sh
+
 #   Use this script to test if a given TCP host/port are available
 
 cmdname=$(basename $0)
@@ -13,8 +14,8 @@ Usage:
     -h HOST | --host=HOST       Host or IP under test
     -p PORT | --port=PORT       TCP port under test
                                 Alternatively, you specify the host and port as host:port
-    -s | --strict               Only execute subcommand if the test succeeds
-    -q | --quiet                Don't output any status messages
+    # -s | --strict               Only execute subcommand if the test succeeds
+    -q | --quiet                Dont output any status messages
     -t TIMEOUT | --timeout=TIMEOUT
                                 Timeout in seconds, zero for no timeout
     -- COMMAND ARGS             Execute command with args after the test finishes
@@ -22,68 +23,13 @@ USAGE
     exit 1
 }
 
-wait_for()
-{
-    if [[ $TIMEOUT -gt 0 ]]; then
-        echoerr "$cmdname: waiting $TIMEOUT seconds for $HOST:$PORT"
-    else
-        echoerr "$cmdname: waiting for $HOST:$PORT without a timeout"
-    fi
-    start_ts=$(date +%s)
-    while :
-    do
-        (echo > /dev/tcp/$HOST/$PORT) >/dev/null 2>&1
-        result=$?
-        if [[ $result -eq 0 ]]; then
-            end_ts=$(date +%s)
-            echoerr "$cmdname: $HOST:$PORT is available after $((end_ts - start_ts)) seconds"
-            break
-        fi
-        sleep 1
-    done
-    return $result
-}
 
-wait_for_wrapper()
-{
-    # In order to support SIGINT during timeout: http://unix.stackexchange.com/a/57692
-    if [[ $QUIET -eq 1 ]]; then
-        timeout $TIMEOUT $0 --quiet --child --host=$HOST --port=$PORT --timeout=$TIMEOUT &
-    else
-        timeout $TIMEOUT $0 --child --host=$HOST --port=$PORT --timeout=$TIMEOUT &
-    fi
-    PID=$!
-    trap "kill -INT -$PID" INT
-    wait $PID
-    RESULT=$?
-    if [[ $RESULT -ne 0 ]]; then
-        echoerr "$cmdname: timeout occurred after waiting $TIMEOUT seconds for $HOST:$PORT"
-    fi
-    return $RESULT
-}
+
 
 # process arguments
 while [[ $# -gt 0 ]]
 do
     case "$1" in
-        *:* )
-        hostport=(${1//:/ })
-        HOST=${hostport[0]}
-        PORT=${hostport[1]}
-        shift 1
-        ;;
-        --child)
-        CHILD=1
-        shift 1
-        ;;
-        -q | --quiet)
-        QUIET=1
-        shift 1
-        ;;
-        -s | --strict)
-        STRICT=1
-        shift 1
-        ;;
         -h)
         HOST="$2"
         if [[ $HOST == "" ]]; then break; fi
@@ -111,6 +57,10 @@ do
         TIMEOUT="${1#*=}"
         shift 1
         ;;
+        -q | --quiet)
+        QUIET=1
+        shift 1
+        ;;
         --)
         shift
         CLI="$@"
@@ -126,36 +76,49 @@ do
     esac
 done
 
-if [[ "$HOST" == "" || "$PORT" == "" ]]; then
-    echoerr "Error: you need to provide a host and port to test."
-    usage
-fi
 
 TIMEOUT=${TIMEOUT:-15}
-STRICT=${STRICT:-0}
-CHILD=${CHILD:-0}
 QUIET=${QUIET:-0}
+SHOULD_EXECUTE=0
 
-if [[ $CHILD -gt 0 ]]; then
-    wait_for
-    RESULT=$?
-    exit $RESULT
+if [[ "$HOST" == "" || "$PORT" == "" || $CLI == "" ]]; then
+    echoerr "Error: you need to provide host and port to test condition and a command to run after the test is successfull."
+    usage
+    exit 1
 else
-    if [[ $TIMEOUT -gt 0 ]]; then
-        wait_for_wrapper
-        RESULT=$?
-    else
-        wait_for
-        RESULT=$?
+    echo "Commmand : $CLI"
+
+    start_ts=$(date +%s)
+    while :
+    do
+        # (echo > /dev/tcp/$HOST/$PORT) >/dev/null 2>&1
+        nc "$HOST" "$PORT" < /dev/null > /dev/null 2>&1
+        result=$?
+        if [[ $result -eq 0 ]]; then
+            end_ts=$(date +%s)
+            echoerr "$HOST:$PORT is available after $((end_ts - start_ts)) seconds"
+            SHOULD_EXECUTE=1
+            break
+        fi
+        end_ts=$(date +%s)
+        if [[ $((TIMEOUT - $((end_ts - start_ts)))) -lt 0 ]]; then
+            echoerr "timeout reached, exiting"
+            break
+        else
+            echoerr "$HOST:$PORT is not available - sleeping"
+            sleep 1
+        fi
+    done
+
+    echo "Should execute : $SHOULD_EXECUTE"
+    if [[ $SHOULD_EXECUTE -eq 1 ]]; then
+        echoerr "$HOST:$PORT is up - executing command"
+        exec $CLI
     fi
+
 fi
 
-if [[ $CLI != "" ]]; then
-    if [[ $RESULT -ne 0 && $STRICT -eq 1 ]]; then
-        echoerr "$cmdname: strict mode, refusing to execute subprocess"
-        exit $RESULT
-    fi
-    exec $CLI
-else
-    exit $RESULT
-fi
+
+
+
+
