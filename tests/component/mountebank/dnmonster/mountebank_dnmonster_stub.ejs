@@ -1,50 +1,64 @@
 {
-	"responses": [
-		{
-          	"inject": "<%- stringify(filename, 'mountebank_dnmonster_monster_response.ejs') %>"
-		}
-	],
-	"predicates": [
-		{
-			"or": [
-				{
-					"equals": {
-		            	"method": "GET",
-		            	"path": "/monster/ABCDEF123456789",
-		            	"query": {
-		              		"size": "80"
-		            	},
-		            	"headers": {
-		              		"Accept": "text/plain"
-		            	},
-		            	"caseSensitive": true
-		          	}
-		        },
-		        
-
-	        ]
-		}
-	]
-},
-{
-	"responses": [
-		{
-			"inject": "<%- stringify(filename, 'mountebank_dnmonster_monster_response.ejs') %>"
-		}
-	],
-	"predicates": [
-		{
-			"matches": {
-            	"method": "GET",
-            	"path": "/monster/",
-            	"query": {
-              		"size": "80"
-            	},
-            	"headers": {
-              		"Accept": "text/plain"
-            	},
-            	"caseSensitive": true
-		    }
-		}
-	]
+    "port": 8080,
+    "protocol": "http",
+    "name": "dnmonster",
+    "stubs": [
+        {
+            "responses": [
+                {
+                    "inject": "<%- stringify(filename, 'mountebank_dnmonster_response.ejs') %>"
+                }
+            ],
+            "predicates": [
+                {
+                    "equals": {
+                        "method": "GET",
+                        "path": "/monster/ABCDEF123456789",
+                        "query": {
+                            "size": "80"
+                        }
+                    }
+                       
+                }
+            ]
+        },
+        {
+            "responses": [
+                {
+                    "inject": "<%- stringify(filename, 'mountebank_dnmonster_response.ejs') %>"
+                }
+            ],
+            "predicates": [
+                {
+                    "matches": {
+                        "method": "GET",
+                        "path": "^/monster/[A-Za-z0-9]+$",
+                        "query": {
+                            "size": "80"
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "responses": [
+                {
+                    "is": { "statusCode": 404 }
+                }
+            ],
+            "predicates": [
+                {
+                    "not" : {    
+                        "matches": {
+                            "method": "GET",
+                            "path": "^/monster/[A-Za-z0-9]+$",
+                            "query": {
+                                "size": "80"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ]
 }
