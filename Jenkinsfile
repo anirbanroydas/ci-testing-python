@@ -2,11 +2,7 @@
 
 node {
 	
-	stage('test Jenkinsfile') {
-		echo "First Jenkinsfile test"
-	}
-
-	stage('Pring Env Before source checkout') {
+	stage('Print Env Before source checkout') {
 		
 		echo "Branch Name: ${env.BRANCH_NAME}"
 		echo "BUILD_NUMBER : ${env.BUILD_NUMBER}"
@@ -26,7 +22,7 @@ node {
 		checkout scm
 	}
 
-	stage('Pring Env After source checkout') {
+	stage('Print Env After source checkout') {
 		
 		echo "Branch Name: ${env.BRANCH_NAME}"
 		echo "BUILD_NUMBER : ${env.BUILD_NUMBER}"
@@ -41,31 +37,49 @@ node {
 
 	}
 	
-	stage('Test bash script') {
-		echo "Testing bash script"
-		sh './testbash.sh'
+	stage('Build') {
+		echo "Build Stage Starting"
+		echo "Build Stage Finsihed"
 	}
 
-	stage('Test bash script inside a folder') {
-		echo "Testing bash script inside a folder"
-		sh './identidock/app/testbash.sh'
-	}
-	
-	stage('Test docker functionality') {
+	stage('Docker-Functionality-Test') {
 		echo "Chekcking Docker functionality..."
 		echo "docker version"
 		sh "sudo docker version"
 		echo "docker images"
 		sh "sudo docker images"
-		echo "docker ps"
-		sh "sudo docker ps"
+		echo "docker ps -a"
+		sh "sudo docker ps -a"
 
-		dir('identidock') {
-			echo "inside directory identidock"
+	}
+
+	stage('Unit-Test') {
+		echo "Unit Tests Starting"
+		sh "make test-unit"
+		echo "Unit Tests Finished"
+	}
+
+	stage('Component-Test') {
+		echo "Component Tests Starting"
+		sh "make test-component"
+		echo "Component Tests Finished"
+	}
+	
+	stage('Directory-Script-Test') {
+		echo "Chekcking Directory and Shell scripting power"
+		echo "ls -a (first)"
+		sh "ls -a"
+
+		dir('ci_testing_python/app') {
+			echo "inside directory ci_testing_python/app"
+			echo "ls -a (seconds)"
+			sh "ls -a"
 			
 		}
-		
-			
+
+		echo "ls -a (third)"
+		sh "ls -a"
+				
 	}
 	
 	
