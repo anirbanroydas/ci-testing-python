@@ -6,19 +6,19 @@ NC='\033[0m'
 
 ARGS=("$@")
 
-DOCKER="$6"
-DOCKER_COMPOSE="$7"
 
-# DOCKER="docker"
-# DOCKER_COMPOSE="docker-compose"
+DOCKER="docker"
+DOCKER_COMPOSE="docker-compose"
 
-# if [ "$6" = "jenkins" ]; then
-# 	DOCKER="sudo docker"
-# 	DOCKER_COMPOSE="sudo docker-compose"
-# elif [[ "$6" -eq "travis" ]]; then
-# 	DOCKER="docker"
-# 	DOCKER_COMPOSE="docker-compose"
-# fi
+echo "CI SERVER : $6"
+
+if [ "$6" = "jenkins" ]; then
+	DOCKER="sudo docker"
+	DOCKER_COMPOSE="sudo docker-compose"
+elif [[ "$6" -eq "travis" ]]; then
+	DOCKER="docker"
+	DOCKER_COMPOSE="docker-compose"
+fi
 
 
 cleanup () {
@@ -37,8 +37,16 @@ trap 'cleanup ; printf "${RED}Tests Failed For Unexpected Reasons${NC}\n"' HUP I
 
 # build and run
 echo "Building and then Running Test Containers"
-"$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml build
-"$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml up -d
+if [ "$6" = "jenkins" ]; then
+	sudo docker-compose -p "$3" -f "$4"/docker-compose.yml build
+	sudo docker-compose -p "$3" -f "$4"/docker-compose.yml up -d
+elif [[ "$6" -eq "travis" ]]; then
+	docker-compose -p "$3" -f "$4"/docker-compose.yml build
+	docker-compose -p "$3" -f "$4"/docker-compose.yml up -d
+fi
+
+# "$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml build
+# "$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml up -d
 
 if [ $? -ne 0 ] ; then
   printf "${RED}Docker Compose Failed${NC}\n"
