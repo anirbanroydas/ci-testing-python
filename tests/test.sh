@@ -6,17 +6,19 @@ NC='\033[0m'
 
 ARGS=("$@")
 
+DOCKER="$6"
+DOCKER_COMPOSE="$7"
 
-DOCKER="docker"
-DOCKER_COMPOSE="docker-compose"
+# DOCKER="docker"
+# DOCKER_COMPOSE="docker-compose"
 
-if [ "$6" = "jenkins" ]; then
-	DOCKER=sudo docker
-	DOCKER_COMPOSE=sudo docker-compose
-elif [[ "$6" -eq "travis" ]]; then
-	DOCKER=docker
-	DOCKER_COMPOSE=docker-compose
-fi
+# if [ "$6" = "jenkins" ]; then
+# 	DOCKER="sudo docker"
+# 	DOCKER_COMPOSE="sudo docker-compose"
+# elif [[ "$6" -eq "travis" ]]; then
+# 	DOCKER="docker"
+# 	DOCKER_COMPOSE="docker-compose"
+# fi
 
 
 cleanup () {
