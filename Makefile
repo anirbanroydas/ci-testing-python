@@ -13,8 +13,11 @@ INTEGRATION_TEST_DIR = $(PWD)/tests/integration
 COMPONENT_TEST_DIR = $(PWD)/tests/component
 END_TO_END_TEST_DIR = $(PWD)/tests/e2e
 
+DATA_VOLUME_NAME = redis_data_citestingpython
+
 PROJECT_ROOT_DIR = $(PWD)
 
+DEPLOY_ENVIRONMENT = production
 CI_SERVER = travis
 DOCKER = docker 
 DOCKER_COMPOSE = docker-compose
@@ -24,6 +27,17 @@ ifeq ($(CI_SERVER), jenkins)
 	DOCKER_COMPOSE = sudo docker-compose
 endif
 
+
+
+
+
+.PHONY: travis-setup jenkins-setup
+
+travis-setup:
+	bash -c "scripts/travis-setup.sh $(PROJECT_ROOT_DIR)"
+
+jenkins-setup:
+	bash -c "scripts/jenkins-setup.sh $(PROJECT_ROOT_DIR)"
 
 
 .PHONY: clean-pyc clean-build
@@ -40,6 +54,16 @@ clean-build:
 
 
 
+.PHONY: volume-prod
+
+build-volume-prod:
+	$(DOCKER) volume create --driver=rexray --opt=size=8 --opt=volumeType=gp2 $(DATA_VOLUME_NAME)
+
+remove-volume-prod: remove-prod
+	$(DOCKER) volume rm $(DATA_VOLUME_NAME)
+
+
+
 .PHONY: build build-dev build-prod
 
 build: build-dev
@@ -47,8 +71,7 @@ build: build-dev
 build-dev: 
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) build
 
-build-prod:
-	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml build
+build-prod: volume-prod
 
 
 
@@ -60,7 +83,7 @@ start-dev: build-dev
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) up -d
 
 start-prod: build-prod
-	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml up -d
+	$(DOCKER) stack deploy --compose-file docker-compose.prod.yml $(PROJECT_NAME)
 
 
 
@@ -72,7 +95,7 @@ stop-dev:
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) stop
 
 stop-prod:
-	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml stop
+	$(DOCKER) stack rm $(PROJECT_NAME)
 
 stop-all: stop-dev stop-prod
 
@@ -86,7 +109,6 @@ remove-dev: stop-dev
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) rm --force -v
 
 remove-prod: stop-prod
-	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) -f docker-compose.prod.yml rm --force -v
 
 remove-all: remove-dev remove-prod
 
@@ -155,6 +177,18 @@ test-functional: test-e2e
 
 
 test: system-prune test-unit test-integration test-component test-ui-acceptance
+
+
+test-staging: test-e2e
+
+
+.PHONY: build-tag-push deploy
+
+build-tag-push:
+	bash -c "scripts/build-tag-push-image.sh $(CI_SERVER)"
+
+deploy:
+	bash -c "scripts/deploy.sh $(CI_SERVER) $(DEPLOY_ENVIRONMENT)"
 
 
 
