@@ -5,8 +5,6 @@ DOCKER_COMPOSE="docker-compose"
 
 echo "CI SERVER : $1"
 echo "Deploy Environment: $2"
-echo "env : "
-printenv
 
 if [ "$1" = "jenkins" ]; then
     DOCKER="sudo docker"
