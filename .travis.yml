@@ -54,6 +54,7 @@ before_deploy:
   - eval "$(ssh-agent -s)"
   - chmod 600 /tmp/travis_deploy_rsa
   - ssh-add /tmp/travis_deploy_rsa
+  - source scripts/add_known_hosts.sh
   # - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
   # make deploy DEPLOY_ENVIRONMENT=staging && make test-e2e;
   # fi
