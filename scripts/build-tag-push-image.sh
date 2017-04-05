@@ -119,7 +119,7 @@ if [ "$PULL_REQUEST" = "false" ]; then
     
     tag latest
     # finally push all the tagged images
-    echo "Pushing $DOCKER_REPO"
+    echo "Pushing to docker repo"
     push $DOCKER_REPO
 fi
 
