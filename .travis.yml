@@ -35,7 +35,7 @@ before_install:
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
   - which docker-compose
-  - sudo docker-compose --version
+  - docker-compose --version
 
 install:
   - pip install coveralls
