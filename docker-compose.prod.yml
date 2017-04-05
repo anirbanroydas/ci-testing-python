@@ -3,13 +3,13 @@ version: "3"
 services:
 
   identidock:
-    image: aroyd/identidock:${IDENTIDOCK_IMAGE_PROD_TAG:-latest}
+    image: ${DOCKER_REPO}:${IDENTIDOCK_IMAGE_PROD_TAG:-latest}
     ports:
       - "9090:9090"
       - "9091:9091"
-    # environment:
-    #   ENV: PROD
-    env_file: docker-production-env
+    environment:
+      ENV: PROD
+    # env_file: docker-production.env
     labels:
       io.aroyd.service.container.name: "identidock"
       io.aroyd.servcie.container.env: "production"
@@ -17,8 +17,9 @@ services:
     deploy:
       mode: replicated
       replicas: 4
-      constraints:
-        - node.role == worker
+      placement:
+        constraints:
+          - node.role == worker
       update_config:
         parallelism: 2
         delay: 30s
