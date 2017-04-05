@@ -2,17 +2,13 @@ ci-testing-python
 ==================
 
 .. image:: https://travis-ci.org/anirbanroydas/ci-testing-python.svg?branch=master
-     :target: https://travis-ci.org/anirbanroydas/ci-testing-python
-     :alt: Travis Ci Build Status
+  :target: https://travis-ci.org/anirbanroydas/ci-testing-python
 
 .. image:: https://coveralls.io/repos/github/anirbanroydas/ci-testing-python/badge.svg?branch=master
-	   :target: https://coveralls.io/github/anirbanroydas/ci-testing-python
-     :alt: Coverage Status
-
+	:target: https://coveralls.io/github/anirbanroydas/ci-testing-python
 
 .. image:: https://readthedocs.org/projects/ci-testing-python/badge/?version=latest
-      :target: http://ci-testing-python.readthedocs.io/en/latest/?badge=latest
-      :alt: Documentation Status
+  :target: http://ci-testing-python.readthedocs.io/en/latest/?badge=latest
 
 
 
