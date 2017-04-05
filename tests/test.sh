@@ -15,13 +15,11 @@ echo "CI SERVER : $6"
 if [ "$6" = "jenkins" ]; then
 	DOCKER="sudo docker"
 	DOCKER_COMPOSE="sudo docker-compose"
-elif [[ "$6" -eq "travis" ]]; then
+elif [ "$6" = "travis" ]; then
 	DOCKER="docker"
 	DOCKER_COMPOSE="docker-compose"
 fi
 
-echo "docker : $DOCKER"
-echo "docker compose : $DOCKER_COMPOSE"
 
 
 cleanup () {
@@ -40,16 +38,8 @@ trap 'cleanup ; printf "${RED}Tests Failed For Unexpected Reasons${NC}\n"' HUP I
 
 # build and run
 echo "Building and then Running Test Containers"
-if [ "$6" = "jenkins" ]; then
-	sudo docker-compose -p "$3" -f "$4"/docker-compose.yml build
-	sudo docker-compose -p "$3" -f "$4"/docker-compose.yml up -d
-elif [[ "$6" -eq "travis" ]]; then
-	docker-compose -p "$3" -f "$4"/docker-compose.yml build
-	docker-compose -p "$3" -f "$4"/docker-compose.yml up -d
-fi
-
-# "$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml build
-# "$DOCKER_COMPOSE" -p "$3" -f "$4"/docker-compose.yml up -d
+$DOCKER_COMPOSE -p "$3" -f "$4"/docker-compose.yml build
+$DOCKER_COMPOSE -p "$3" -f "$4"/docker-compose.yml up -d
 
 if [ $? -ne 0 ] ; then
   printf "${RED}Docker Compose Failed${NC}\n"
