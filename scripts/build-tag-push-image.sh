@@ -13,8 +13,6 @@ DOCKER="docker"
 DOCKER_COMPOSE="docker-compose"
 
 echo "CI SERVER : $1"
-echo "current deployment production : $DEPLOY_PRODUCTION"
-echo "current identidock image tag : $DEPLOY_IDENTIDOCK_IMAGE_TAG"
 
 if [ "$1" = "jenkins" ]; then
     DOCKER="sudo docker"
@@ -35,7 +33,7 @@ elif [ "$1" = "travis" ]; then
     BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
 fi
 
-
+INITIAL_TAG=latest
 
 
 
@@ -67,10 +65,19 @@ tag() {
     fi
     
     if [ "$COMMIT" != "$TAG" ]; then
-        $DOCKER tag ${DOCKER_REPO}:${COMMIT} ${DOCKER_REPO}:${TAG}
+        $DOCKER tag ${DOCKER_REPO}:${INITIAL_TAG} ${DOCKER_REPO}:${TAG}
     fi
 }
 
+
+# tag image with ci-server name along with build number when its not a pull request
+if [ "$PULL_REQUEST" = "false" ]; then
+    if  [ "$1" = "travis" ]; then
+        INITIAL_TAG=travis-$BUILD_NUMBER
+    elif [ "$1" = "jenkins" ]; then
+        INITIAL_TAG=jenkins-$BUILD_NUMBER
+    fi
+fi
 
 
 
@@ -79,7 +86,7 @@ echo "Building Image $DOCKER_REPO:$COMMIT"
 $DOCKER build \
   --build-arg BUILD_DATE=$BUILD_DATE \
   --build-arg COMMIT=$COMMIT \
-  -t ${DOCKER_REPO}:${COMMIT} .
+  -t ${DOCKER_REPO}:${INITIAL_TAG}.
 
 
 # loging to docker registry
@@ -90,8 +97,6 @@ $DOCKER login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
 # tag image with master when in commit is from branch
 if [ "$BRANCH" = "master" ] && [ "$PULL_REQUEST" = "false" ]; then
     tag master-${COMMIT}
-    export DEPLOY_PRODUCTION=yes
-    export DEPLOY_IDENTIDOCK_IMAGE_TAG=master-${COMMIT}
 fi;
 
 # tag image with release tag number when its not a pull request and its a tag event
@@ -106,14 +111,7 @@ if [ "$BRANCH" != "master" ]  && [ "$PULL_REQUEST" = "false" ]; then
 fi
 
 
-# tag image with ci-server name along with build number when its not a pull request
-if [ "$PULL_REQUEST" = "false" ]; then
-    if  [ "$1" = "travis" ]; then
-        tag travis-$BUILD_NUMBER
-    elif [ "$1" = "jenkins" ]; then
-        tag jenkins-$BUILD_NUMBER
-    fi
-fi
+
 
 
 # Finally, tag image as latest only when its not a pull request
@@ -125,9 +123,6 @@ if [ "$PULL_REQUEST" = "false" ]; then
     push $DOCKER_REPO
 fi
 
-
-echo "final deployment production : $DEPLOY_PRODUCTION"
-echo "final identidock image tag : $DEPLOY_IDENTIDOCK_IMAGE_TAG"
 
 
 
