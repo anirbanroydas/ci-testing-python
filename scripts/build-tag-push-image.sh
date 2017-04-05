@@ -82,11 +82,11 @@ fi
 
 
 # build image
-echo "Building Image $DOCKER_REPO:$COMMIT"
+echo "Building Image $DOCKER_REPO:$INITIAL_TAG"
 $DOCKER build \
   --build-arg BUILD_DATE=$BUILD_DATE \
   --build-arg COMMIT=$COMMIT \
-  -t ${DOCKER_REPO}:${INITIAL_TAG}.
+  -t ${DOCKER_REPO}:${INITIAL_TAG} .
 
 
 # loging to docker registry
