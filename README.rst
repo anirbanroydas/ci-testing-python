@@ -113,6 +113,13 @@ Install
   		$ sudo apt-get update
   		$ sudo apt-get install make
 
+* **Step 3 - Install Dependencies**
+  
+  Install the following dependencies on your local development machine which will be used in various scripts.
+
+  1. openssl
+  2. ssh-keygen
+  3. openssh
 
 
 
