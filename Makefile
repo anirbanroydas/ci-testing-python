@@ -54,9 +54,12 @@ clean-build:
 
 
 
-.PHONY: volume-prod
+.PHONY: prod-setup build-volume-prod remove-volume-prod
 
-build-volume-prod:
+prod-setup: 
+	bash -c "source docker-production.env"
+
+build-volume-prod: 
 	$(DOCKER) volume create --driver=rexray --opt=size=8 --opt=volumeType=gp2 $(DATA_VOLUME_NAME)
 
 remove-volume-prod: remove-prod
@@ -71,7 +74,7 @@ build: build-dev
 build-dev: 
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) build
 
-build-prod: volume-prod
+build-prod: build-volume-prod
 
 
 
@@ -83,7 +86,7 @@ start-dev: build-dev
 	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) up -d
 
 start-prod: build-prod
-	$(DOCKER) stack deploy --compose-file docker-compose.prod.yml $(PROJECT_NAME)
+	bash -c "source docker-production.env && $(DOCKER) stack deploy --compose-file docker-compose.prod.yml $(PROJECT_NAME)"
 
 
 
