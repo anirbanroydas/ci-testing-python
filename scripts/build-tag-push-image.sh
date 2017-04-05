@@ -13,6 +13,8 @@ DOCKER="docker"
 DOCKER_COMPOSE="docker-compose"
 
 echo "CI SERVER : $1"
+echo "current deployment production : $DEPLOY_PRODUCTION"
+echo "current identidock image tag : $DEPLOY_IDENTIDOCK_IMAGE_TAG"
 
 if [ "$1" = "jenkins" ]; then
     DOCKER="sudo docker"
@@ -88,7 +90,7 @@ $DOCKER login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
 # tag image with master when in commit is from branch
 if [ "$BRANCH" = "master" ] && [ "$PULL_REQUEST" = "false" ]; then
     tag master-${COMMIT}
-    DEPLOY_PRODUCTION=true
+    DEPLOY_PRODUCTION=yes
     DEPLOY_IDENTIDOCK_IMAGE_TAG=master-{COMMIT}
 fi;
 
@@ -124,7 +126,8 @@ if [ "$PULL_REQUEST" = "false" ]; then
 fi
 
 
-
+echo "final deployment production : $DEPLOY_PRODUCTION"
+echo "final identidock image tag : $DEPLOY_IDENTIDOCK_IMAGE_TAG"
 
 
 
