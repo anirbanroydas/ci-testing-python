@@ -3,18 +3,46 @@ version: "3"
 services:
 
   identidock:
-    image: aroyd/identidock:${IDENTIDOCK_IMAGE_TAG:-latest}
+    image: aroyd/identidock:${IDENTIDOCK_IMAGE_PROD_TAG:-latest}
     ports:
       - "9090:9090"
       - "9091:9091"
-    environment:
-      ENV: PROD 
-    depends_on:
-      - dnmonster
-      - redis
+    # environment:
+    #   ENV: PROD
+    env_file: docker-production-env
+    labels:
+      io.aroyd.service.container.name: "identidock"
+      io.aroyd.servcie.container.env: "production"
+
+    deploy:
+      mode: replicated
+      replicas: 4
+      constraints:
+        - node.role == worker
+      update_config:
+        parallelism: 2
+        delay: 30s
+        failure_action: pause
+        monitor: 20s
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 120s
+      labels:
+        io.aroyd.service.task.name: "identidock"
+        io.aroyd.service.task.env: "production"
   
   dnmonster:
     image: amouat/dnmonster:1.0
   
   redis:
     image: redis:3.0-alpine
+    volumes:
+      - redis_data_volume:${REDIS_DATA_DIR:-/data}
+
+
+volumes:
+  redis_data_volume:
+    external:
+      name: ${REDIS_DATA_VOLUME_NAME:-redis_data_citestingpython}
