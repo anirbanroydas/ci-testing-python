@@ -47,8 +47,8 @@ script:
 after_success:
   - coverage combine --append && coveralls
   - if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
-  make build-tag-push;
-  fi
+        make build-tag-push;
+    fi
 
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_18064ed45155_key -iv $encrypted_18064ed45155_iv -in travis_deploy_rsa.enc -out /tmp/travis_deploy_rsa -d
