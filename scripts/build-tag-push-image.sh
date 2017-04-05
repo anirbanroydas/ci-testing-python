@@ -35,10 +35,39 @@ fi
 
 
 
-# if [ "$PULL_REQUEST" !=  "false" ] ; then
-#   echo "This is a build triggered by an external PR. Skipping docker push.";
-#   exit 0;
-# fi;
+
+
+push() {
+    DOCKER_PUSH=1;
+    while [ $DOCKER_PUSH -gt 0 ] ; do
+        echo "Pushing $1";
+        $DOCKER push $1;
+        DOCKER_PUSH=$(echo $?);
+        if [ "$DOCKER_PUSH" -gt 0 ] ; then
+            echo "Docker push failed with exit code $DOCKER_PUSH";
+        fi;
+    done;
+
+    if [ $DOCKER_PUSH -gt 0 ]; then
+        exit $DOCKER_PUSH
+    fi
+}
+
+
+
+
+tag() {
+    if [ -z "$1" ] ; then
+        echo "Please pass the tag"
+        exit 1
+    else
+        TAG=$1
+    fi
+    
+    if [ "$COMMIT" != "$TAG" ]; then
+        $DOCKER tag ${DOCKER_REPO}:${COMMIT} ${DOCKER_REPO}:${TAG}
+    fi
+}
 
 
 
@@ -95,41 +124,6 @@ if [ "$PULL_REQUEST" = "false" ]; then
 fi
 
 
-
-
-
-
-push() {
-    DOCKER_PUSH=1;
-    while [ $DOCKER_PUSH -gt 0 ] ; do
-        echo "Pushing $1";
-        $DOCKER push $1;
-        DOCKER_PUSH=$(echo $?);
-        if [ "$DOCKER_PUSH" -gt 0 ] ; then
-            echo "Docker push failed with exit code $DOCKER_PUSH";
-        fi;
-    done;
-
-    if [ $DOCKER_PUSH -gt 0 ]; then
-        exit $DOCKER_PUSH
-    fi
-}
-
-
-
-
-tag() {
-    if [ -z "$1" ] ; then
-        echo "Please pass the tag"
-        exit 1
-    else
-        TAG=$1
-    fi
-    
-    if [ "$COMMIT" != "$TAG" ]; then
-        $DOCKER tag ${DOCKER_REPO}:${COMMIT} ${DOCKER_REPO}:${TAG}
-    fi
-}
 
 
 
