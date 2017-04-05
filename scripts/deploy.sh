@@ -5,6 +5,8 @@ DOCKER_COMPOSE="docker-compose"
 
 echo "CI SERVER : $1"
 echo "Deploy Environment: $2"
+echo "env : "
+printenv
 
 if [ "$1" = "jenkins" ]; then
     DOCKER="sudo docker"
@@ -34,7 +36,7 @@ SERVICE_NAME=cipython_identidock
 
 while [ "$DEPLOY_SUCCESS" -gt 0 ];
 do
-	SERVER_COUNT = SERVER_COUNT + 1
+	SERVER_COUNT=$((SERVER_COUNT+1))
 
 	if [ $SERVER_COUNT -eq $((MANAGER_COUNT+1)) ]; then
 		echo "Unable to update service in any of the managers"
