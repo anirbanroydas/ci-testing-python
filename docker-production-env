@@ -1,5 +1,5 @@
-IDENTIDOCK_IMAGE_DEV_TAG=latest-dev
-IDENTIDOCK_IMAGE_PROD_TAG=latest
-REDIS_DATA_DIR=/data
-REDIS_DATA_VOLUME_NAME=redis_data_citestingpython
-ENV=PROD
+export IDENTIDOCK_IMAGE_DEV_TAG=latest-dev
+export IDENTIDOCK_IMAGE_PROD_TAG=latest
+export REDIS_DATA_DIR=/data
+export REDIS_DATA_VOLUME_NAME=redis_data_citestingpython
+export DOCKER_REPO=aroyd/ci-testing-python
