@@ -25,6 +25,12 @@
 nohup.out
 
 
+# SSH KEYS
+travis_deploy_rsa
+travis_deploy_rsa.pub
+jenkins_deploy_rsa
+jenkins_deploy_rsa.pub
+
 ############# Python  ###################
 
 # Byte-compiled / optimized / DLL files
