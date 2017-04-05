@@ -75,6 +75,14 @@ Features
 Installation
 ------------
 
+Prerequisite (Optional)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+To safegurad secret and confidential data leakage via your git commits to public github repo, check ``git-secrets``.
+
+This `git secrets <https://github.com/awslabs/git-secrets>`_ project helps in preventing secrete leakage by mistake.
+
+
 Dependencies
 ~~~~~~~~~~~~~
 
@@ -89,7 +97,7 @@ Install
 
 * **Step 1 - Install Docker**
 
-  Follow my another github project, where everythin related to DevOps and scripts are mentioned along with setting up a development environemt to use Docker is mentioned.
+  Follow my another github project, where everything related to DevOps and scripts are mentioned along with setting up a development environemt to use Docker is mentioned.
 
   	* Project: https://github.com/anirbanroydas/DevOps
 
@@ -108,11 +116,60 @@ Install
 
 
 
+
+CI Setup
+---------
+
+
+If you are using the project in a CI setup (like travis, jenkins), then, on every push to github, you can set up your travis build or jenkins pipeline. Travis will use the ``.travis.yml`` file and Jenknis will use the ``Jenkinsfile`` to do their jobs. Now, in case you are using Travis, then run the Travis specific setup commands and for Jenkins run the Jenkins specific setup commands first. You can also use both to compare between there performance.
+
+The setup keys read the values from a ``.env`` file which has all the environment variables exported. But you will notice an example ``env`` file and not a ``.env`` file. Make sure to copy the ``env`` file to ``.env`` and **change/modify** the actual variables with your real values.
+
+The ``.env`` files are not commited to git since they are mentioned in the ``.gitignore`` file to prevent any leakage of confidential data.
+
+After you run the setup commands, you will be presented with a number of secure keys. Copy those to your config files before proceeding.
+
+**NOTE:** This is a one time setup.
+**NOTE:** Check the setup scripts inside the ``scripts/`` directory to understand what are the environment variables whose encrypted keys are provided.
+**NOTE:** Don't forget to **Copy** the secure keys to your ``.travis.yml`` or ``Jenkinsfile``
+
+**NOTE:** If you don't want to do the copy of ``env`` to ``.env`` file and change the variable values in ``.env`` with your real values then you can just edit the ``travis-setup.sh`` or ``jenknis-setup.sh`` script and update the values their directly. The scripts are in the ``scripts/`` project level directory.
+
+
+**IMPORTANT:** You have to run the ``travis-setup.sh`` script or the ``jenkins-setup.sh`` script in your local machine before deploying to remote server.
+ 
+
+Travis Setup
+~~~~~~~~~~~~~~~~~
+
+These steps will encrypt your environment variables to secure your confidential data like api keys, docker based keys, deploy specific keys.
+::
+
+	$ make travis-setup
+
+
+
+Jenkins Setup
+~~~~~~~~~~~~~~~~~~~
+
+These steps will encrypt your environment variables to secure your confidential data like api keys, docker based keys, deploy specific keys.
+::
+
+	$ make jenkins-setup
+
+
+
+
+
+
+
 Usage
 -----
 
-After having installed the above dependencies, just run the following commands to use it:
+After having installed the above dependencies, and ran the **Optional** (If not using any CI Server) or **Required** (If using any CI Server) **CI Setup** Step, then just run the following commands to use it:
 
+
+You can run and test the app in your local development machine or you can run and test directly in a remote machine. You can also run and test in a production environment. 
 
 
 
