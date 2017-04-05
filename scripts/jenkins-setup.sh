@@ -10,7 +10,7 @@ fi
 
 
 echo "Generating New Public/Private RSA Key Pair for use with Travis, skip the passpharase"
-ssh-keygen -t rsa -b 4096 -C jenkins@"$JENKINS_SERVER" -f ./jenkins_deploy_rsa
+ssh-keygen -t rsa -b 4096 -C 'jenkins@"$JENKINS_SERVER"' -f ./jenkins_deploy_rsa
 
 echo "Copying rsa public key to server"
 "$1"/scripts/copy-ssh-keys-to-server.sh "$1" jenkins
