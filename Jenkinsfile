@@ -27,7 +27,7 @@ node {
 		
 		stage('Build') {
 			echo "Build Stage Starting"
-			sh "pip install coveralls"
+			sh "sudo pip install coveralls"
 			echo "Build Stage Finsihed"
 		}
 
