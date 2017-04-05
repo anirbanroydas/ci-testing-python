@@ -7,10 +7,13 @@ Welcome to ci-testing-python's documentation!
 =============================================
 
 .. image:: https://travis-ci.org/anirbanroydas/ci-testing-python.svg?branch=master
-     :target: https://travis-ci.org/anirbanroydas/ci-testing-python
+  :target: https://travis-ci.org/anirbanroydas/ci-testing-python
 
 .. image:: https://coveralls.io/repos/github/anirbanroydas/ci-testing-python/badge.svg?branch=master
-	:target: https://coveralls.io/github/anirbanroydas/ci-testing-python
+   :target: https://coveralls.io/github/anirbanroydas/ci-testing-python
+
+.. image:: https://readthedocs.org/projects/ci-testing-python/badge/?version=latest
+  :target: http://ci-testing-python.readthedocs.io/en/latest/?badge=latest
 
 
 
