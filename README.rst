@@ -3,9 +3,16 @@ ci-testing-python
 
 .. image:: https://travis-ci.org/anirbanroydas/ci-testing-python.svg?branch=master
      :target: https://travis-ci.org/anirbanroydas/ci-testing-python
+     :alt: Travis Ci Build Status
 
 .. image:: https://coveralls.io/repos/github/anirbanroydas/ci-testing-python/badge.svg?branch=master
-	:target: https://coveralls.io/github/anirbanroydas/ci-testing-python
+	   :target: https://coveralls.io/github/anirbanroydas/ci-testing-python
+     :alt: Coverage Status
+
+
+.. image:: https://readthedocs.org/projects/ci-testing-python/badge/?version=latest
+      :target: http://ci-testing-python.readthedocs.io/en/latest/?badge=latest
+      :alt: Documentation Status
 
 
 
@@ -16,7 +23,7 @@ Sample Microservice App in Python for CI-CD and Testing Purpose using flask, pyt
 Documentation
 --------------
 
-**Link :** http://ci_testing_python.readthedocs.io/en/latest/
+**Link :** http://ci-testing-python.readthedocs.io/en/latest/
 
 
 Project Home Page
