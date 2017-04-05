@@ -70,11 +70,19 @@ INSTALL_REQUIRES = [
 
 TEST_REQUIRES = [
     "pytest == 3.0.6",
-    "pytest-flask == 0.10.0"
+    "pytest-flask == 0.10.0",
+    "doubles == 1.2.1"
 ]
 
 
-DEV_REQUIRES = [] + TEST_REQUIRES
+DEV_REQUIRES = [
+    "tox == 2.6.0",
+    "coverage == 4.3.4",
+    "pytest-cov == 2.4.0",
+    "coveralls == 1.1",
+
+] + TEST_REQUIRES
+
 
 EXTRAS_REQUIRE = {
     'dev': DEV_REQUIRES,
