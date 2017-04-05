@@ -1,0 +1,5 @@
+IDENTIDOCK_IMAGE_DEV_TAG=latest-dev
+IDENTIDOCK_IMAGE_PROD_TAG=latest
+REDIS_DATA_DIR=/data
+REDIS_DATA_VOLUME_NAME=redis_data_citestingpython
+ENV=PROD
