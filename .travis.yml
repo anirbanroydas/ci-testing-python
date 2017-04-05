@@ -64,7 +64,7 @@ deploy:
   script: make deploy
   on:
     branch: master
-    # condition: $DEPLOY_PRODUCTION = yes
+    condition: $TRAVIS_PULL_REQUEST = false
     # tags: true
 
 notifications:
