@@ -90,8 +90,8 @@ $DOCKER login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
 # tag image with master when in commit is from branch
 if [ "$BRANCH" = "master" ] && [ "$PULL_REQUEST" = "false" ]; then
     tag master-${COMMIT}
-    DEPLOY_PRODUCTION=yes
-    DEPLOY_IDENTIDOCK_IMAGE_TAG=master-{COMMIT}
+    export DEPLOY_PRODUCTION=yes
+    export DEPLOY_IDENTIDOCK_IMAGE_TAG=master-${COMMIT}
 fi;
 
 # tag image with release tag number when its not a pull request and its a tag event
