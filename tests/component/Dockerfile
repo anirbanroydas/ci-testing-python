@@ -7,6 +7,6 @@ RUN pip install -r requirements-dev.txt
 RUN pip install requests==2.13.0
 
 COPY tests/component/test_component_identidock.py /component_test/
-COPY wait-for-it.sh /usr/local/bin/
+COPY scripts/wait-for-it.sh /usr/local/bin/
 
 CMD ["wait-for-it.sh", "--host=identidock", "--port=5000", "--timeout=10", "--", "pytest", "-v", "-s", "test_component_identidock.py"]
