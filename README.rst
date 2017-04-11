@@ -341,7 +341,7 @@ Todo
 -----
 
 1. Add Blog post regarding this topic.
-2. Add Contract Tests using part
+2. Add Contract Tests using pact
 3. Add integration tests
 4. Add e2d tests
 
