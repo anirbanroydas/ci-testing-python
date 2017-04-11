@@ -2,9 +2,9 @@ version: "3"
 
 services:
 
-  identidock_unit_tester:
+  identidock_contract_tester:
     build: ../..
-    image: aroyd/identidock_unit_test:${IDENTIDOCK_UNIT_TEST_IMAGE_TAG:-latest}
+    image: aroyd/identidock_contract_test:${IDENTIDOCK_CONTRACT_TEST_IMAGE_TAG:-latest}
     environment:
       ENV: CONTRACT_TEST 
 
