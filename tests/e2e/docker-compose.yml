@@ -4,7 +4,7 @@ services:
 
   identidock_e2e_tester:
     build: ../..
-    image: aroyd/identidock_ui_acceptance_test:${IDENTIDOCK_UI_ACCEPTANCE_TEST_IMAGE_TAG:-latest}
+    image: aroyd/identidock_e2e_test:${IDENTIDOCK_E2E_TEST_IMAGE_TAG:-latest}
     environment:
       ENV: END_TO_END_TEST 
     depends_on:
