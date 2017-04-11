@@ -38,12 +38,32 @@ services:
     image: amouat/dnmonster:1.0
   
   redis:
-    image: redis:3.0-alpine
+    image: redis:3.2.8-alpine
+    labels:
+      io.aroyd.service.container.name: "redis"
+      io.aroyd.servcie.container.env: "production"
+    deploy:
+      placement:
+        constraints:
+          - engine.labels.io.aroyd.machine.aws.az == b
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: pause
+        monitor: 10s
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        window: 120s
     volumes:
       - redis_data_volume:${REDIS_DATA_DIR:-/data}
 
 
 volumes:
   redis_data_volume:
-    external:
-      name: ${REDIS_DATA_VOLUME_NAME:-redis_data_citestingpython}
+    driver: rexray
+    driver_opts:
+      volumeType: "gp2"
+      size: "4"
+      availabilityZone: "ap-south-1b"
