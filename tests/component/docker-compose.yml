@@ -19,7 +19,7 @@ services:
   
   dnmonster:
     build: mountebank/dnmonster
-    image: aroyd/dnmoster_stub:${DNMONSTER_STUB_IMAGE_TAG:-latest}
+    image: aroyd/dnmoster_mountebank_stub:${DNMONSTER_MOUNTEBANK_STUB_IMAGE_TAG:-latest}
     # image: amouat/dnmonster:1.0
   
   redis:
