@@ -13,9 +13,9 @@ INTEGRATION_TEST_DIR = $(PWD)/tests/integration
 COMPONENT_TEST_DIR = $(PWD)/tests/component
 END_TO_END_TEST_DIR = $(PWD)/tests/e2e
 
-DATA_VOLUME_NAME = redis_data_citestingpython
-
 PROJECT_ROOT_DIR = $(PWD)
+
+DATA_VOLUME_NAME = $(PROJECT_NAME)_redis_data_volume
 
 DEPLOY_ENVIRONMENT = production
 CI_SERVER = travis
@@ -54,15 +54,13 @@ clean-build:
 
 
 
-.PHONY: prod-setup build-volume-prod remove-volume-prod
+.PHONY: build-volume-prod remove-volume-prod
 
-prod-setup: 
-	bash -c "source docker-production.env"
 
-build-volume-prod: 
-	$(DOCKER) volume create --driver=rexray --opt=size=8 --opt=volumeType=gp2 $(DATA_VOLUME_NAME)
+build-volume-prod:
+	$(DOCKER) volume create --driver=rexray --opt=size=4 --opt=volumeType=gp2 $(DATA_VOLUME_NAME)
 
-remove-volume-prod: remove-prod
+remove-volume-prod:
 	$(DOCKER) volume rm $(DATA_VOLUME_NAME)
 
 
@@ -72,7 +70,7 @@ remove-volume-prod: remove-prod
 build: build-dev
 
 build-dev: 
-	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) build
+	bash -c "source docker.env && $(DOCKER_COMPOSE) -p $(PROJECT_NAME) build"
 
 build-prod: build-volume-prod
 
@@ -83,10 +81,10 @@ build-prod: build-volume-prod
 start: start-dev
 
 start-dev: build-dev
-	$(DOCKER_COMPOSE) -p $(PROJECT_NAME) up -d
+	bash -c "source docker.env && $(DOCKER_COMPOSE) -p $(PROJECT_NAME) up -d"
 
-start-prod: build-prod
-	bash -c "source docker-production.env && $(DOCKER) stack deploy --compose-file docker-compose.prod.yml $(PROJECT_NAME)"
+start-prod:
+	bash -c "source docker.env && $(DOCKER) stack deploy --compose-file docker-compose.prod.yml $(PROJECT_NAME)"
 
 
 
