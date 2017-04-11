@@ -41,7 +41,7 @@ Check ``ci-testing-python/LICENSE`` file for full Copyright notice.
 
 
 
-Documentation:
+Contents:
 
 .. toctree::
    :maxdepth: 2
@@ -49,6 +49,7 @@ Documentation:
    overview
    features
    installation
+   ci_setup
    usage
    testing
 
